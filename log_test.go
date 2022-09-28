@@ -13,6 +13,10 @@ func TestLog(t *testing.T) {
 	got := len(logFileLines)
 	expected := len(expectedLogFileLines)
 
+	if !StringSlicesEqual(logFileLines, expectedLogFileLines) {
+		t.Errorf("Expected log file lines to be equal.")
+	}
+
 	if got != expected {
 		t.Errorf("Expected: %d but got: %d", expected, got)
 	}
