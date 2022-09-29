@@ -26,18 +26,55 @@ func TestGetFileContent(t *testing.T) {
 func TestParseLine(t *testing.T) {
 	parsedLine := nginx.ParseLine("127.0.0.1 - - [28/Sep/2022:22:15:40 +0000] \"GET /nginx_status HTTP/1.1\" 200 103 \"-\" \"nginx-amplify-agent/1.7.0-1\"")
 	expectedParsedLine := struct {
-		ClientIp string
-		DateTime string
+		ClientIp          string
+		DateTime          string
+		UtcOffset         string
+		HttpRequestType   string
+		HttpRequest       string
+		UserAgent         string
+		HttpRequestStatus string
+		HttpReferer       string
 	}{
-		ClientIp: "127.0.0.1",
-		DateTime: "2022-09-28T22:15:40",
+		ClientIp:          "127.0.0.1",
+		DateTime:          "2022-09-28T22:15:40",
+		UtcOffset:         "+0000",
+		HttpRequestType:   "GET",
+		HttpRequest:       "/nginx_status",
+		UserAgent:         "nginx-amplify-agent/1.7.0-1",
+		HttpRequestStatus: "200",
+		HttpReferer:       "-",
 	}
 
-	if parsedLine.ClientIp != expectedParsedLine.ClientIp {
-		t.Errorf("expected: %s but got: %s", expectedParsedLine.ClientIp, parsedLine.ClientIp)
+	if parsedLine.RemoteAddress != expectedParsedLine.ClientIp {
+		t.Errorf("expected: %s but got: %s", expectedParsedLine.ClientIp, parsedLine.RemoteAddress)
 	}
 
 	if parsedLine.DateTime != expectedParsedLine.DateTime {
 		t.Errorf("expected: %s but got: %s", expectedParsedLine.DateTime, parsedLine.DateTime)
 	}
+
+	if parsedLine.UtcOffset != expectedParsedLine.UtcOffset {
+		t.Errorf("expected: %s but got: %s", expectedParsedLine.UtcOffset, parsedLine.UtcOffset)
+	}
+
+	if parsedLine.HttpRequestType != expectedParsedLine.HttpRequestType {
+		t.Errorf("expected: %s but got: %s", expectedParsedLine.HttpRequestType, parsedLine.HttpRequestType)
+	}
+
+	if parsedLine.HttpRequest != expectedParsedLine.HttpRequest {
+		t.Errorf("expected: %s but got: %s", expectedParsedLine.HttpRequest, parsedLine.HttpRequest)
+	}
+
+	if parsedLine.UserAgent != expectedParsedLine.UserAgent {
+		t.Errorf("expected: %s but got: %s", expectedParsedLine.UserAgent, parsedLine.UserAgent)
+	}
+
+	if parsedLine.HttpRequestStatus != expectedParsedLine.HttpRequestStatus {
+		t.Errorf("expected: %s but got: %s", expectedParsedLine.HttpRequestStatus, parsedLine.HttpRequestStatus)
+	}
+
+	if parsedLine.HttpReferer != expectedParsedLine.HttpReferer {
+		t.Errorf("expected: %s but got: %s", expectedParsedLine.HttpReferer, parsedLine.HttpReferer)
+	}
+
 }
